@@ -410,15 +410,17 @@ button, input, select { font-family: inherit; }
 .logo {
   font-family: var(--font-tech);
   font-weight: 900;
-  font-size: clamp(38px, 6vw, 76px);
-  letter-spacing: 0.06em;
+  font-size: clamp(26px, 4.4vw, 52px);
+  letter-spacing: 0.02em;
   margin: 0;
-  line-height: 1;
+  line-height: 1.15;
   text-align: center;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
-.logo.small { font-size: clamp(26px, 3.4vw, 42px); }
+.logo.small { font-size: clamp(22px, 3vw, 36px); }
 .logo-cy { color: var(--c-cyan); text-shadow: 0 0 26px rgba(52, 224, 255, 0.85); }
-.logo-ru { color: var(--c-magenta); text-shadow: 0 0 26px rgba(255, 79, 216, 0.85); margin-left: 0.12em; }
+.logo-ru { color: var(--c-magenta); text-shadow: 0 0 26px rgba(255, 79, 216, 0.85); margin-left: 0.08em; }
 .logo-sub {
   text-align: center;
   color: var(--c-text-dim);
@@ -456,7 +458,7 @@ button, input, select { font-family: inherit; }
 }
 .panel-wide { width: min(1080px, 100%); }
 .panel-narrow { width: min(440px, 100%); text-align: center; }
-.panel-home { text-align: center; }
+.panel-home { text-align: center; overflow: visible; padding-inline: clamp(22px, 4vw, 40px); }
 
 .panel-title {
   font-family: var(--font-tech);
