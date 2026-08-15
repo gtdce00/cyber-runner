@@ -1,0 +1,68 @@
+/* Dashboard ครู — ใช้ร่วมกับ main.css */
+html, body.dash-body {
+  overflow: auto;
+  height: auto;
+  min-height: 100%;
+  background: #04060f;
+}
+.dash-top {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap;
+  padding: 14px 22px;
+  background: rgba(7, 11, 31, 0.92);
+  border-bottom: 1px solid rgba(52, 224, 255, 0.28);
+  backdrop-filter: blur(10px);
+}
+.dash-brand {
+  text-decoration: none; color: inherit;
+  font-family: var(--font-tech); font-weight: 900; font-size: 22px;
+}
+.dash-brand small {
+  display: block; font-family: var(--font-ui); font-weight: 400;
+  font-size: 13px; color: var(--c-text-dim); letter-spacing: 0;
+}
+.dash-top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.dash-top-actions .cloud-strip { margin: 0; }
+
+.dash-main { max-width: 1180px; margin: 0 auto; padding: 22px 18px 60px; }
+.dash-kpis {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px;
+}
+.kpi {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-brd);
+  border-radius: var(--r);
+  padding: 14px 16px;
+}
+.kpi span { color: var(--c-text-dim); font-size: 0.85em; }
+.kpi b { display: block; font-family: var(--font-tech); font-size: 1.8em; color: var(--c-cyan); }
+
+.dash-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.dash-card { position: relative; padding: 18px 20px; margin: 0 0 16px; }
+.dash-sub { margin: 16px 0 8px; font-size: 1em; color: var(--c-gold); }
+textarea {
+  width: 100%; min-height: 90px; resize: vertical;
+  padding: 10px 12px; border-radius: 10px;
+  border: 1px solid var(--panel-brd);
+  background: rgba(8, 12, 32, 0.85); color: var(--c-text);
+  font-family: inherit; font-size: 0.95em;
+}
+.table-wrap { overflow-x: auto; }
+.dash-table tbody tr { cursor: pointer; }
+.dash-table tbody tr:hover { background: rgba(52, 224, 255, 0.12); }
+.dash-table tbody tr.selected { background: rgba(52, 224, 255, 0.2); outline: 1px solid var(--c-cyan); }
+.trend-up { color: var(--c-lime); font-weight: 700; }
+.trend-down { color: var(--c-red); font-weight: 700; }
+.trend-flat { color: var(--c-text-dim); }
+
+.weak-bars { display: flex; flex-direction: column; gap: 8px; }
+.weak-row { display: grid; grid-template-columns: 110px 1fr 52px; gap: 8px; align-items: center; font-size: 0.9em; }
+.weak-track { height: 10px; background: rgba(255,255,255,0.08); border-radius: 99px; overflow: hidden; }
+.weak-fill { height: 100%; background: linear-gradient(90deg, var(--c-red), var(--c-gold)); }
+
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 50; }
+
+@media (max-width: 900px) {
+  .dash-kpis, .dash-grid { grid-template-columns: 1fr; }
+}

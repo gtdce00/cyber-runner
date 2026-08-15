@@ -1,0 +1,156 @@
+{
+  "_readme": "นิยามด่านทั้ง 15 ด่าน — แก้ไขชื่อ/ธีม/ความยาวได้ที่นี่โดยไม่ต้องแตะโค้ด | theme: computer, cyber, coding, network, ai, boss | segments = จำนวนช่วงวิ่งก่อนถึงแต่ละคำถาม (มาก = ด่านยาวขึ้น) | seed = เลขสุ่มรูปแบบด่าน (เปลี่ยนเลข = ผังด่านใหม่)",
+  "levels": [
+    {
+      "id": 1,
+      "name": "Computer Basics",
+      "nameTh": "พื้นฐานคอมพิวเตอร์",
+      "theme": "computer",
+      "world": "Computer World",
+      "segments": 2,
+      "seed": 1101,
+      "topics": ["CPU", "RAM", "Monitor", "Keyboard", "Mouse", "Printer", "Input/Output"]
+    },
+    {
+      "id": 2,
+      "name": "Hardware Hunter",
+      "nameTh": "นักล่าฮาร์ดแวร์",
+      "theme": "computer",
+      "world": "Computer World",
+      "segments": 2,
+      "seed": 1202,
+      "topics": ["Hardware", "Software", "Storage", "Mainboard", "GPU", "SSD", "HDD"]
+    },
+    {
+      "id": 3,
+      "name": "Internet World",
+      "nameTh": "โลกอินเทอร์เน็ต",
+      "theme": "computer",
+      "world": "Computer World",
+      "segments": 2,
+      "seed": 1303,
+      "topics": ["Internet", "Browser", "Wi-Fi", "Network", "Website", "Search Engine"]
+    },
+    {
+      "id": 4,
+      "name": "Cyber Safe",
+      "nameTh": "ปลอดภัยไซเบอร์",
+      "theme": "cyber",
+      "world": "Cyber / Logic World",
+      "segments": 2,
+      "seed": 1404,
+      "topics": ["Password", "Phishing", "Privacy", "Cybersecurity", "Digital Safety"]
+    },
+    {
+      "id": 5,
+      "name": "Logic Forest",
+      "nameTh": "ป่าตรรกะ",
+      "theme": "cyber",
+      "world": "Cyber / Logic World",
+      "segments": 2,
+      "seed": 1505,
+      "topics": ["Logic", "Pattern", "Sequence", "Classification", "Problem Solving"]
+    },
+    {
+      "id": 6,
+      "name": "Algorithm Road",
+      "nameTh": "ถนนอัลกอริทึม",
+      "theme": "cyber",
+      "world": "Cyber / Logic World",
+      "segments": 3,
+      "seed": 1606,
+      "topics": ["Algorithm", "Flowchart", "Sequence", "Decision", "Loop"]
+    },
+    {
+      "id": 7,
+      "name": "Coding City",
+      "nameTh": "เมืองแห่งการเขียนโค้ด",
+      "theme": "coding",
+      "world": "Coding World",
+      "segments": 3,
+      "seed": 1707,
+      "topics": ["Block Coding", "Scratch", "Commands", "Variables", "Events"]
+    },
+    {
+      "id": 8,
+      "name": "Debug Dungeon",
+      "nameTh": "ดันเจียนแก้บั๊ก",
+      "theme": "coding",
+      "world": "Coding World",
+      "segments": 3,
+      "seed": 1808,
+      "topics": ["Debugging", "Error", "Logical Error", "Code Analysis"]
+    },
+    {
+      "id": 9,
+      "name": "Data World",
+      "nameTh": "โลกข้อมูล",
+      "theme": "coding",
+      "world": "Coding World",
+      "segments": 3,
+      "seed": 1909,
+      "topics": ["Data", "Information", "Input", "Process", "Output", "Storage"]
+    },
+    {
+      "id": 10,
+      "name": "Network Station",
+      "nameTh": "สถานีเครือข่าย",
+      "theme": "network",
+      "world": "Network / Digital World",
+      "segments": 3,
+      "seed": 2010,
+      "topics": ["LAN", "WAN", "IP", "Router", "Switch", "Network Basics"]
+    },
+    {
+      "id": 11,
+      "name": "Coding Factory",
+      "nameTh": "โรงงานโค้ด",
+      "theme": "network",
+      "world": "Network / Digital World",
+      "segments": 3,
+      "seed": 2111,
+      "topics": ["Loop", "Condition", "Variable", "Algorithm", "Programming Logic"]
+    },
+    {
+      "id": 12,
+      "name": "Digital World",
+      "nameTh": "โลกดิจิทัล",
+      "theme": "network",
+      "world": "Network / Digital World",
+      "segments": 3,
+      "seed": 2212,
+      "topics": ["Digital Technology", "Cloud", "Online Services", "Digital Citizenship"]
+    },
+    {
+      "id": 13,
+      "name": "AI Lab",
+      "nameTh": "ห้องทดลองปัญญาประดิษฐ์",
+      "theme": "ai",
+      "world": "AI / Future Technology World",
+      "segments": 3,
+      "seed": 2313,
+      "topics": ["AI", "Machine Learning", "Generative AI", "AI Ethics"]
+    },
+    {
+      "id": 14,
+      "name": "Technology City",
+      "nameTh": "นครเทคโนโลยี",
+      "theme": "ai",
+      "world": "AI / Future Technology World",
+      "segments": 3,
+      "seed": 2414,
+      "topics": ["Robotics", "IoT", "Smart Technology", "Emerging Technology"]
+    },
+    {
+      "id": 15,
+      "name": "COMPUTER BOSS",
+      "nameTh": "บอสคอมพิวเตอร์",
+      "theme": "boss",
+      "world": "Computer Boss Arena",
+      "segments": 2,
+      "seed": 2515,
+      "boss": true,
+      "topics": ["Hardware", "Software", "Internet", "Cybersecurity", "Logic", "Algorithm", "Coding", "Data", "AI"]
+    }
+  ]
+}

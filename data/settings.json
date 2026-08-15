@@ -1,0 +1,39 @@
+{
+  "_readme": "ค่าเริ่มต้นของการแข่งขัน — ครูสามารถแก้ที่ไฟล์นี้ หรือแก้ผ่านหน้า Settings ในเกม (ค่าที่แก้ในเกมจะถูกเก็บใน localStorage และมีความสำคัญเหนือไฟล์นี้ กดปุ่ม 'คืนค่าเริ่มต้น' เพื่อกลับมาใช้ค่าจากไฟล์นี้)",
+
+  "competition": {
+    "minutes": 15
+  },
+
+  "score": {
+    "correct": 100,
+    "wrong": -50,
+    "levelClear": 100,
+    "coin": 10,
+    "bonus": 200,
+    "comboStep": 25,
+    "comboMax": 8,
+    "allowNegative": false
+  },
+
+  "levels": {
+    "enabled": 15,
+    "questionsPerLevel": 3
+  },
+
+  "difficulty": "auto",
+
+  "audio": {
+    "sfx": true,
+    "sfxVolume": 0.7,
+    "music": true,
+    "musicVolume": 0.3
+  },
+
+  "accessibility": {
+    "hint": true,
+    "touchControls": false,
+    "highContrast": false,
+    "uiScale": 100
+  }
+}

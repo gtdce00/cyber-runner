@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Cyber Runner
+Comment[th]=วิ่ง คิด ตอบ พิชิตโลกคอมพิวเตอร์
+Exec=bash PLACEHOLDER/play.sh
+Path=PLACEHOLDER
+Icon=PLACEHOLDER/assets/ui/game-icon.png
+Terminal=false
+Categories=Game;Education;

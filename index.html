@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cyber Runner – วิ่ง คิด ตอบ พิชิตโลกคอมพิวเตอร์</title>
+<meta name="theme-color" content="#34e0ff" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" type="image/png" href="assets/ui/game-icon.png" />
+<link rel="apple-touch-icon" href="assets/ui/game-icon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Orbitron:wght@600;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles/main.css" />
+</head>
+<body>
+
+<div id="app" class="app">
+  <!-- ==================== GAME STAGE ==================== -->
+  <div id="stage" class="stage">
+    <canvas id="game-canvas" width="1280" height="720" aria-label="พื้นที่เกม Cyber Runner"></canvas>
+
+    <!-- ---------- IN-GAME HUD ---------- -->
+    <div id="hud" class="hud hidden" aria-live="polite">
+      <div class="hud-row hud-top">
+        <div class="hud-box hud-player">
+          <span class="hud-label">PLAYER</span>
+          <span class="hud-value" id="hud-player-name">—</span>
+          <span class="hud-sub" id="hud-player-class"></span>
+        </div>
+
+        <div class="hud-box hud-time" id="hud-time-box">
+          <span class="hud-label">TIME</span>
+          <span class="hud-value big" id="hud-time">15:00</span>
+        </div>
+
+        <div class="hud-box hud-score">
+          <span class="hud-label">SCORE</span>
+          <span class="hud-value big" id="hud-score">000000</span>
+        </div>
+      </div>
+
+      <div class="hud-row hud-bottom">
+        <div class="hud-chip" id="hud-level-chip">
+          <span class="chip-key">LEVEL</span>
+          <span class="chip-val" id="hud-level">01/15</span>
+          <span class="chip-name" id="hud-level-name">Computer Basics</span>
+        </div>
+
+        <div class="hud-progress" title="ความคืบหน้าในด่าน">
+          <div class="hud-progress-fill" id="hud-progress"></div>
+        </div>
+
+        <div class="hud-chip chip-combo hidden" id="hud-combo-chip">
+          <span class="chip-key">COMBO</span>
+          <span class="chip-val" id="hud-combo">x1</span>
+        </div>
+
+        <div class="hud-chip chip-coin">
+          <span class="chip-icon">◆</span>
+          <span class="chip-val" id="hud-coins">0</span>
+        </div>
+
+        <button class="hud-btn" id="btn-pause" title="หยุดชั่วคราว (ESC)">II</button>
+      </div>
+    </div>
+
+    <!-- ---------- QUESTION PANEL ---------- -->
+    <div id="question-panel" class="q-panel hidden" role="dialog" aria-label="คำถาม">
+      <div class="q-head">
+        <span class="q-badge" id="q-badge">คำถามที่ 1</span>
+        <span class="q-cat" id="q-cat">hardware</span>
+        <span class="q-diff" id="q-diff">EASY</span>
+      </div>
+      <p class="q-text" id="q-text">คำถาม…</p>
+      <div class="q-options" id="q-options"></div>
+      <div class="q-foot">
+        <span class="q-hintline" id="q-hint"></span>
+        <span class="q-tip">ยืนใต้ป้ายที่เลือก แล้วกระโดดชนเพื่อตอบ!</span>
+      </div>
+    </div>
+
+    <!-- ---------- FEEDBACK / EXPLANATION PANEL ---------- -->
+    <div id="feedback-panel" class="fb-panel hidden" role="alert">
+      <div class="fb-title" id="fb-title">CORRECT!</div>
+      <div class="fb-answer" id="fb-answer"></div>
+      <div class="fb-explain" id="fb-explain"></div>
+      <div class="fb-score" id="fb-score"></div>
+      <div class="fb-timer"><div class="fb-timer-fill" id="fb-timer-fill"></div></div>
+    </div>
+
+    <!-- ---------- TOAST (time warnings) ---------- -->
+    <div id="toast" class="toast hidden"></div>
+    <div id="bigcount" class="bigcount hidden"></div>
+
+    <!-- ---------- TOUCH CONTROLS ---------- -->
+    <div id="touch-controls" class="touch-controls hidden">
+      <div class="touch-left">
+        <button class="tbtn" data-key="left" aria-label="ซ้าย">◀</button>
+        <button class="tbtn" data-key="right" aria-label="ขวา">▶</button>
+      </div>
+      <div class="touch-right">
+        <button class="tbtn tbtn-jump" data-key="jump" aria-label="กระโดด">JUMP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== OVERLAY SCREENS ==================== -->
+  <div id="overlay" class="overlay">
+
+    <!-- ---------- LOADING ---------- -->
+    <section id="screen-loading" class="screen active">
+      <div class="loader-wrap">
+        <h1 class="logo"><span class="logo-cy">CYBER</span><span class="logo-ru">RUNNER</span></h1>
+        <p class="logo-sub">วิ่ง • คิด • ตอบ • พิชิตโลกคอมพิวเตอร์</p>
+        <div class="bar"><div class="bar-fill" id="load-bar"></div></div>
+        <p class="load-text" id="load-text">กำลังเตรียมระบบ…</p>
+      </div>
+    </section>
+
+    <!-- ---------- HOME ---------- -->
+    <section id="screen-home" class="screen">
+      <div class="panel panel-home">
+        <h1 class="logo"><span class="logo-cy">CYBER</span><span class="logo-ru">RUNNER</span></h1>
+        <p class="logo-sub">เกมแข่งขันวันวิทยาศาสตร์ • ระดับ ป.4 – ม.3</p>
+        <div class="menu">
+          <button class="btn btn-primary btn-xl" id="btn-start">▶ เริ่มเกม</button>
+          <button class="btn" id="btn-howto">📖 วิธีเล่น</button>
+          <button class="btn" id="btn-leaderboard">🏆 กระดานคะแนน</button>
+          <button class="btn btn-ghost" id="btn-settings">⚙ ตั้งค่า (ครู/ผู้ดูแล)</button>
+        </div>
+        <p class="foot-note">15 ด่าน • คำถามคอมพิวเตอร์ • จับเวลาแข่งขัน • ตอบผิดไม่ตาย เรียนรู้ต่อได้</p>
+      </div>
+    </section>
+
+    <!-- ---------- PLAYER PROFILE ---------- -->
+    <section id="screen-profile" class="screen">
+      <div class="panel">
+        <h2 class="panel-title">ข้อมูลผู้เข้าแข่งขัน</h2>
+        <form id="profile-form" class="form" autocomplete="off">
+
+          <!-- เลือกจากรายชื่อที่ครูเพิ่มไว้ (แสดงเมื่อมีรายชื่อในระบบ) -->
+          <div class="field roster-box hidden" id="pf-roster-box">
+            <span>เลือกชื่อของคุณ <b class="req">*</b></span>
+            <input type="search" id="pf-roster-search" class="roster-search"
+                   placeholder="พิมพ์เพื่อค้นหาชื่อ..." autocomplete="off" />
+            <select id="pf-roster" size="8" class="roster-select"></select>
+            <div class="roster-foot">
+              <span id="pf-roster-count" class="roster-count"></span>
+              <button type="button" class="link-btn" id="pf-manual-toggle">ไม่มีชื่อฉันในรายการ — พิมพ์เอง</button>
+            </div>
+          </div>
+
+          <!-- กรอกเอง (ใช้เมื่อไม่มีรายชื่อในระบบ หรือไม่พบชื่อตัวเอง) -->
+          <div id="pf-manual-fields">
+            <label class="field" id="pf-name-field">
+              <span>ชื่อ - นามสกุล <b class="req">*</b></span>
+              <input type="text" id="pf-name" maxlength="60" placeholder="เช่น สมชาย ใจดี" />
+            </label>
+            <div class="field-row">
+              <label class="field">
+                <span>ชั้น <b class="req">*</b></span>
+                <select id="pf-grade">
+                  <option value="">— เลือก —</option>
+                  <option>ป.4</option><option>ป.5</option><option>ป.6</option>
+                  <option>ม.1</option><option>ม.2</option><option>ม.3</option>
+                </select>
+              </label>
+              <label class="field">
+                <span>ห้อง</span>
+                <input type="text" id="pf-room" maxlength="10" placeholder="เช่น 1" />
+              </label>
+            </div>
+            <label class="field">
+              <span>ชื่อทีม (ถ้ามี)</span>
+              <input type="text" id="pf-team" maxlength="40" placeholder="เช่น ทีมไซเบอร์" />
+            </label>
+          </div>
+
+          <div class="info-strip" id="pf-info"></div>
+          <div class="cloud-strip" id="pf-cloud"></div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost" data-nav="home">← กลับ</button>
+            <button type="submit" class="btn btn-primary btn-xl">START GAME</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ---------- HOW TO PLAY ---------- -->
+    <section id="screen-howto" class="screen">
+      <div class="panel">
+        <h2 class="panel-title">วิธีเล่น</h2>
+        <div class="howto">
+          <div class="howto-card">
+            <h3>การควบคุม</h3>
+            <ul>
+              <li><kbd>←</kbd> <kbd>→</kbd> หรือ <kbd>A</kbd> <kbd>D</kbd> — เดิน / วิ่ง</li>
+              <li><kbd>Space</kbd> <kbd>↑</kbd> <kbd>W</kbd> — กระโดด (กด 2 ครั้ง = กระโดดคู่)</li>
+              <li><kbd>Shift</kbd> — วิ่งเร็ว</li>
+              <li><kbd>Esc</kbd> / <kbd>P</kbd> — หยุดชั่วคราว</li>
+              <li><kbd>R</kbd> — กลับไปจุดเช็คพอยต์</li>
+              <li><kbd>H</kbd> — ขอคำใบ้ (ถ้าเปิดใช้งาน)</li>
+            </ul>
+          </div>
+          <div class="howto-card">
+            <h3>กติกา</h3>
+            <ul>
+              <li>วิ่งไปทางขวาจนถึง <b>ประตูคำถาม</b></li>
+              <li>อ่านคำถาม — <b>ป้ายคำตอบ A / B / C / D</b> จะลอยอยู่เหนือทางวิ่ง</li>
+              <li>วิ่งไปยืนใต้ป้ายที่คิดว่าถูก แล้ว <b>กระโดดชนป้าย</b> เพื่อตอบ</li>
+              <li>ตอบถูก → ได้คะแนน + เปิดทาง</li>
+              <li>ตอบผิด → เสียคะแนน แต่ <b>ไม่ตาย ไม่จบเกม</b> และได้อ่านเฉลย</li>
+              <li>เก็บเหรียญข้อมูล ◆ เพื่อคะแนนเพิ่ม</li>
+              <li>ทำคะแนนให้มากที่สุดก่อนหมดเวลา!</li>
+            </ul>
+          </div>
+        </div>
+        <div class="btn-row"><button class="btn btn-primary" data-nav="home">เข้าใจแล้ว</button></div>
+      </div>
+    </section>
+
+    <!-- ---------- SETTINGS (ADMIN) ---------- -->
+    <section id="screen-settings" class="screen">
+      <div class="panel panel-wide">
+        <h2 class="panel-title">⚙ ตั้งค่าการแข่งขัน (ครู / ผู้ดูแล)</h2>
+
+        <div class="settings-grid">
+          <fieldset class="fs">
+            <legend>เวลาแข่งขัน</legend>
+            <div class="chip-row" id="time-presets">
+              <button type="button" class="chip-btn" data-min="10">10 นาที</button>
+              <button type="button" class="chip-btn" data-min="15">15 นาที</button>
+              <button type="button" class="chip-btn" data-min="20">20 นาที</button>
+              <button type="button" class="chip-btn" data-min="30">30 นาที</button>
+            </div>
+            <label class="field">
+              <span>กำหนดเอง (นาที)</span>
+              <input type="number" id="set-minutes" min="1" max="180" step="1" />
+            </label>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>คะแนน</legend>
+            <label class="field"><span>ตอบถูก</span><input type="number" id="set-correct" step="10" /></label>
+            <label class="field"><span>ตอบผิด (ค่าติดลบ)</span><input type="number" id="set-wrong" step="10" /></label>
+            <label class="field"><span>ผ่านด่าน</span><input type="number" id="set-level" step="10" /></label>
+            <label class="field"><span>เก็บเหรียญ</span><input type="number" id="set-coin" step="5" /></label>
+            <label class="field"><span>ภารกิจพิเศษ</span><input type="number" id="set-bonus" step="10" /></label>
+            <label class="field"><span>Combo Bonus (ต่อสเต็ป)</span><input type="number" id="set-combo" step="10" /></label>
+            <label class="check"><input type="checkbox" id="set-negative" /> <span>อนุญาตคะแนนติดลบ</span></label>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>ด่าน & ความยาก</legend>
+            <label class="field"><span>จำนวนด่านที่เปิดใช้งาน (1–15)</span><input type="number" id="set-levels-enabled" min="1" max="15" /></label>
+            <label class="field"><span>คำถามต่อด่าน</span><input type="number" id="set-qpl" min="1" max="8" /></label>
+            <label class="field">
+              <span>ระดับความยาก</span>
+              <select id="set-difficulty">
+                <option value="easy">EASY (ป.4–ป.6)</option>
+                <option value="normal">NORMAL (ป.6–ม.2)</option>
+                <option value="hard">HARD (ม.1–ม.3)</option>
+                <option value="auto">AUTO — เลือกตามชั้นของผู้เล่น</option>
+              </select>
+            </label>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>เสียง & การช่วยเหลือ</legend>
+            <label class="check"><input type="checkbox" id="set-sfx" /> <span>เปิดเสียงเอฟเฟกต์</span></label>
+            <label class="field"><span>ระดับเสียงเอฟเฟกต์</span><input type="range" id="set-sfx-vol" min="0" max="100" /></label>
+            <label class="check"><input type="checkbox" id="set-music" /> <span>เปิดเพลงประกอบ</span></label>
+            <label class="field"><span>ระดับเพลง</span><input type="range" id="set-music-vol" min="0" max="100" /></label>
+            <label class="check"><input type="checkbox" id="set-hint" /> <span>เปิดคำใบ้ (Hint)</span></label>
+            <label class="check"><input type="checkbox" id="set-touch" /> <span>แสดงปุ่มควบคุมบนหน้าจอ</span></label>
+            <label class="check"><input type="checkbox" id="set-contrast" /> <span>โหมด Contrast สูง</span></label>
+            <label class="field"><span>ขนาด UI (%)</span><input type="range" id="set-uiscale" min="80" max="140" step="5" /></label>
+          </fieldset>
+        </div>
+
+        <div class="btn-row btn-row-wrap">
+          <button class="btn btn-ghost" data-nav="home">← กลับ</button>
+          <a class="btn" href="dashboard.html">📊 Dashboard ครู</a>
+          <button class="btn btn-warn" id="btn-reset-settings">คืนค่าเริ่มต้น</button>
+          <button class="btn btn-danger" id="btn-reset-lb">ล้างกระดานคะแนน</button>
+          <button class="btn btn-primary btn-xl" id="btn-save-settings">SAVE SETTINGS</button>
+        </div>
+        <p class="save-note hidden" id="save-note">บันทึกการตั้งค่าเรียบร้อย ✓</p>
+      </div>
+    </section>
+
+    <!-- ---------- LEADERBOARD ---------- -->
+    <section id="screen-leaderboard" class="screen">
+      <div class="panel panel-wide">
+        <h2 class="panel-title">🏆 กระดานคะแนน</h2>
+        <div class="table-wrap">
+          <table class="lb-table">
+            <thead>
+              <tr>
+                <th>#</th><th>ชื่อ</th><th>ชั้น/ห้อง</th><th>ทีม</th>
+                <th>คะแนน</th><th>ด่าน</th><th>ถูก</th><th>ผิด</th><th>เวลาที่ใช้</th><th>วันที่</th>
+              </tr>
+            </thead>
+            <tbody id="lb-body"></tbody>
+          </table>
+        </div>
+        <div class="btn-row btn-row-wrap">
+          <button class="btn btn-ghost" data-nav="home">← กลับหน้าหลัก</button>
+          <button class="btn" id="btn-export-lb">⤓ ส่งออก CSV</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- PAUSE ---------- -->
+    <section id="screen-pause" class="screen">
+      <div class="panel panel-narrow">
+        <h2 class="panel-title">หยุดชั่วคราว</h2>
+        <p class="dim">เวลาการแข่งขันถูกหยุดไว้ชั่วคราว</p>
+        <div class="menu">
+          <button class="btn btn-primary btn-xl" id="btn-resume">▶ เล่นต่อ</button>
+          <button class="btn" id="btn-restart-level">↻ เริ่มด่านนี้ใหม่</button>
+          <button class="btn btn-danger" id="btn-quit">■ จบการแข่งขัน</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- RESULT ---------- -->
+    <section id="screen-result" class="screen">
+      <div class="panel panel-wide result-panel">
+        <h1 class="logo small"><span class="logo-cy">CYBER</span><span class="logo-ru">RUNNER</span></h1>
+        <p class="result-reason" id="result-reason">หมดเวลาการแข่งขัน</p>
+
+        <div class="result-main">
+          <div class="rank-box">
+            <span class="rank-label">RANK</span>
+            <span class="rank-letter" id="result-rank">A</span>
+            <span class="rank-msg" id="result-rank-msg"></span>
+          </div>
+          <div class="result-stats">
+            <div class="stat stat-hero"><span>SCORE</span><b id="r-score">0</b></div>
+            <div class="stat"><span>TIME</span><b id="r-time">00:00</b></div>
+            <div class="stat"><span>LEVELS CLEARED</span><b id="r-levels">0</b></div>
+            <div class="stat ok"><span>CORRECT</span><b id="r-correct">0</b></div>
+            <div class="stat bad"><span>WRONG</span><b id="r-wrong">0</b></div>
+            <div class="stat"><span>COINS</span><b id="r-coins">0</b></div>
+            <div class="stat"><span>BEST COMBO</span><b id="r-combo">x0</b></div>
+            <div class="stat"><span>ACCURACY</span><b id="r-acc">0%</b></div>
+          </div>
+        </div>
+
+        <div class="lb-mini">
+          <h3>อันดับของคุณ: <span id="result-position">-</span></h3>
+        </div>
+        <div class="cloud-strip hidden" id="result-cloud"></div>
+
+        <div class="btn-row btn-row-wrap">
+          <button class="btn btn-primary btn-xl" id="btn-replay">↻ เล่นอีกครั้ง</button>
+          <button class="btn" data-nav="home">🏠 กลับหน้าหลัก</button>
+          <button class="btn" id="btn-view-lb">🏆 ดู Leaderboard</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="rotate-hint" class="rotate-hint hidden">กรุณาใช้หน้าจอแนวนอน หรือขยายหน้าต่างให้กว้างขึ้น</div>
+</div>
+
+<!-- ==================== SCRIPTS ==================== -->
+<!-- Data fallback bundle: lets the game run from file:// where fetch() is blocked.
+     Regenerate with: node tools/bundle-data.mjs -->
+<script src="data/data-bundle.js"></script>
+
+<script src="src/config/assets.js"></script>
+<script src="src/config/cloud.js"></script>
+<script src="src/utils.js"></script>
+<script src="src/dataLoader.js"></script>
+<script src="src/cloud.js"></script>
+<script src="src/settings.js"></script>
+<script src="src/assetLoader.js"></script>
+<script src="src/sprite.js"></script>
+<script src="src/soundManager.js"></script>
+<script src="src/particles.js"></script>
+<script src="src/camera.js"></script>
+<script src="src/collision.js"></script>
+<script src="src/renderer.js"></script>
+<script src="src/player.js"></script>
+<script src="src/level.js"></script>
+<script src="src/boss.js"></script>
+<script src="src/question.js"></script>
+<script src="src/scoring.js"></script>
+<script src="src/timer.js"></script>
+<script src="src/leaderboard.js"></script>
+<script src="src/ui.js"></script>
+<script src="src/game.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>

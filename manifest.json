@@ -1,0 +1,18 @@
+{
+  "name": "Cyber Runner",
+  "short_name": "Cyber Runner",
+  "description": "วิ่ง คิด ตอบ พิชิตโลกคอมพิวเตอร์",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#070b1f",
+  "theme_color": "#34e0ff",
+  "lang": "th",
+  "icons": [
+    {
+      "src": "assets/ui/game-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

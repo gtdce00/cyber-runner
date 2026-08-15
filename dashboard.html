@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard ครู — Cyber Runner</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/dashboard.css" />
+</head>
+<body class="dash-body">
+  <header class="dash-top">
+    <a class="dash-brand" href="index.html">
+      <span class="logo-cy">CYBER</span><span class="logo-ru">RUNNER</span>
+      <small>Dashboard ครู</small>
+    </a>
+    <div class="dash-top-actions">
+      <span id="dash-status" class="cloud-strip info">กำลังเชื่อมต่อ…</span>
+      <button class="btn" id="btn-refresh">↻ รีเฟรช</button>
+      <button class="btn" id="btn-export">⤓ ส่งออก CSV</button>
+      <a class="btn btn-ghost" href="index.html">← กลับไปเกม</a>
+    </div>
+  </header>
+
+  <main class="dash-main">
+    <section class="dash-kpis" id="kpis">
+      <article class="kpi"><span>นักเรียนในรายชื่อ</span><b id="kpi-students">0</b></article>
+      <article class="kpi"><span>ครั้งที่เล่นทั้งหมด</span><b id="kpi-plays">0</b></article>
+      <article class="kpi"><span>คะแนนเฉลี่ยล่าสุด</span><b id="kpi-avg">0</b></article>
+      <article class="kpi"><span>ความแม่นยำเฉลี่ย</span><b id="kpi-acc">0%</b></article>
+    </section>
+
+    <div class="dash-grid">
+      <section class="panel dash-card">
+        <h2 class="panel-title">เพิ่มรายชื่อนักเรียน</h2>
+        <form id="add-form" class="form" autocomplete="off">
+          <label class="field">
+            <span>ชื่อ - นามสกุล *</span>
+            <input type="text" id="add-name" maxlength="60" required placeholder="เช่น สมชาย ใจดี" />
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>ชั้น *</span>
+              <select id="add-grade" required>
+                <option value="">— เลือก —</option>
+                <option>ป.4</option><option>ป.5</option><option>ป.6</option>
+                <option>ม.1</option><option>ม.2</option><option>ม.3</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>ห้อง</span>
+              <input type="text" id="add-room" maxlength="10" placeholder="เช่น 1" />
+            </label>
+          </div>
+          <label class="field">
+            <span>ชื่อทีม (ถ้ามี)</span>
+            <input type="text" id="add-team" maxlength="40" />
+          </label>
+          <button type="submit" class="btn btn-primary">＋ เพิ่มรายชื่อ</button>
+          <p class="foot-note">เพิ่มได้ทีละคน หรือวางหลายบรรทัดในช่องด้านล่าง (ชื่อ,ชั้น,ห้อง)</p>
+          <label class="field">
+            <span>วางรายชื่อหลายคน (บรรทัดละ 1 คน เช่น สมชาย ใจดี,ป.5,1)</span>
+            <textarea id="add-bulk" rows="4" placeholder="สมชาย ใจดี,ป.5,1&#10;สมหญิง เก่งมาก,ม.1,2"></textarea>
+          </label>
+          <button type="button" class="btn" id="btn-bulk">＋ เพิ่มทั้งหมด</button>
+        </form>
+      </section>
+
+      <section class="panel dash-card">
+        <h2 class="panel-title">กรองข้อมูล</h2>
+        <div class="form">
+          <label class="field">
+            <span>ค้นหาชื่อ</span>
+            <input type="search" id="filter-q" placeholder="พิมพ์ชื่อนักเรียน..." />
+          </label>
+          <div class="field-row">
+            <label class="field">
+              <span>ชั้น</span>
+              <select id="filter-grade">
+                <option value="">ทุกชั้น</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>ห้อง</span>
+              <select id="filter-room">
+                <option value="">ทุกห้อง</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <h3 class="dash-sub">จุดอ่อนรวมของห้องที่เลือก</h3>
+        <div id="weak-bars" class="weak-bars"></div>
+      </section>
+    </div>
+
+    <section class="panel dash-card">
+      <h2 class="panel-title">รายชื่อและคะแนนพัฒนาการ</h2>
+      <p class="foot-note">คลิกที่แถวนักเรียนเพื่อดูกราฟคะแนนแต่ละครั้งที่เล่น</p>
+      <div class="table-wrap">
+        <table class="lb-table dash-table" id="student-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>ชื่อ</th>
+              <th>ชั้น/ห้อง</th>
+              <th>เล่น (ครั้ง)</th>
+              <th>คะแนนล่าสุด</th>
+              <th>คะแนนสูงสุด</th>
+              <th>พัฒนาการ</th>
+              <th>ความแม่นยำล่าสุด</th>
+              <th>ด่านล่าสุด</th>
+            </tr>
+          </thead>
+          <tbody id="student-body">
+            <tr><td colspan="9" class="lb-empty">ยังไม่มีข้อมูล — เพิ่มรายชื่อแล้วให้นักเรียนเล่นเกม</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel dash-card hidden" id="progress-card">
+      <h2 class="panel-title" id="progress-title">พัฒนาการ</h2>
+      <canvas id="progress-chart" width="960" height="280"></canvas>
+      <div class="table-wrap">
+        <table class="lb-table dash-table">
+          <thead>
+            <tr>
+              <th>ครั้งที่</th>
+              <th>วันที่</th>
+              <th>คะแนน</th>
+              <th>ถูก / ผิด</th>
+              <th>ความแม่นยำ</th>
+              <th>ด่าน</th>
+              <th>เกรด</th>
+            </tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="src/config/cloud.js"></script>
+  <script src="src/utils.js"></script>
+  <script src="src/cloud.js"></script>
+  <script src="src/dashboard.js"></script>
+</body>
+</html>
