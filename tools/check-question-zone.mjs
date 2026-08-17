@@ -30,7 +30,7 @@ const { GROUND_Y, SIGN_W, SIGN_H, SIGN_Y, SIGN_GAP_X } = LevelBuilder;
 
 /* ---- ค่าคงที่ของผู้เล่นและฟิสิกส์ (ตรงกับ src/player.js) ---- */
 const P_W = 42, P_H = 56;
-const GRAVITY = 2100, JUMP_V = 760, DOUBLE_V = 660;
+const GRAVITY = 2100, JUMP_V = 850, DOUBLE_V = 700;
 const RISE_1 = (JUMP_V ** 2) / (2 * GRAVITY);            // กระโดดครั้งแรก
 const RISE_2 = RISE_1 + (DOUBLE_V ** 2) / (2 * GRAVITY); // + กระโดดคู่
 

@@ -29,6 +29,11 @@
   const SIGN_Y = GROUND_Y - 215;          // ขอบล่างป้ายสูงกว่าหัวผู้เล่นราว 40px
   const SIGN_GAP_X = 270;                 // ระยะห่างจุดเริ่มของแต่ละป้าย (เว้นช่อง 70px)
 
+  // งบกระโดดเดี่ยว ~170px (กดค้าง) / ~120px (กดแปะ)
+  // แท่นทุกชิ้นจึงสูงจากพื้นที่ยืนไม่เกินค่านี้ และขั้นต่อขั้นไม่เกิน STEP
+  const STEP = 72;
+  const PLAT_FROM_GROUND = 88;            // แท่นลอยจากพื้น กระโดดเดี่ยวถึงแน่นอน
+
   /* ---------- ชิ้นส่วนเส้นทาง (Run Segments) ---------- */
   const SEGMENTS = ['flat', 'gap', 'stairs', 'floaters', 'moving', 'hazard', 'enemy', 'tower'];
 
@@ -137,46 +142,48 @@
 
       switch (kind) {
         case 'gap': {
-          const gapW = 150 + rng() * (hard ? 130 : 80);
-          this._ground(x, 200);
-          this._plat(x + 200 + gapW * 0.35, GROUND_Y - 120, 130);
-          this._coinArc(x + 210 + gapW * 0.35, GROUND_Y - 170, 4, 32);
-          const after = x + 200 + gapW + 130;
+          const gapW = 140 + rng() * (hard ? 80 : 50);
+          this._ground(x, 220);
+          this._plat(x + 220 + gapW * 0.32, GROUND_Y - PLAT_FROM_GROUND, 170);
+          this._coinArc(x + 230 + gapW * 0.32, GROUND_Y - PLAT_FROM_GROUND - 50, 4, 36);
+          const after = x + 220 + gapW + 150;
           this._ground(after, 300);
           return after + 300;
         }
         case 'stairs': {
-          this._ground(x, 160);
+          // พื้นต่อเนื่องด้านล่าง กระโดดพลาดแล้วยังวิ่งต่อได้ แล้วปีนใหม่
+          const span = 160 + 4 * 140 + 80;
+          this._ground(x, span + 280);
           let sx = x + 190;
           for (let i = 0; i < 4; i++) {
-            this._plat(sx, GROUND_Y - 90 - i * 74, 118);
-            this._coin(sx + 46, GROUND_Y - 128 - i * 74);
-            sx += 148;
+            this._plat(sx, GROUND_Y - STEP * (i + 1), 150);
+            this._coin(sx + 56, GROUND_Y - STEP * (i + 1) - 40);
+            sx += 140;
           }
-          this._ground(sx + 40, 320);
-          return sx + 360;
+          return x + span + 280;
         }
         case 'floaters': {
-          this._ground(x, 150);
-          let fx = x + 210;
+          const span = 150 + 3 * 190 + 80;
+          this._ground(x, span + 280);
+          let fx = x + 200;
           for (let i = 0; i < 3; i++) {
-            const y = GROUND_Y - (100 + Math.floor(rng() * 3) * 62);
-            this._plat(fx, y, 132);
-            this._coinRow(fx + 30, y - 46, 2, 40);
-            fx += 200;
+            const rise = PLAT_FROM_GROUND + Math.floor(rng() * 3) * 16; // 88 / 104 / 120
+            const y = GROUND_Y - rise;
+            this._plat(fx, y, 160);
+            this._coinRow(fx + 40, y - 44, 2, 40);
+            fx += 190;
           }
-          this._ground(fx + 30, 300);
-          return fx + 330;
+          return x + span + 280;
         }
         case 'moving': {
-          this._ground(x, 190);
-          const travel = 250 + rng() * 130;
-          this._plat(x + 250, GROUND_Y - 130, 150, 22, {
+          this._ground(x, 200);
+          const travel = 220 + rng() * 90;
+          this._plat(x + 240, GROUND_Y - PLAT_FROM_GROUND, 170, 22, {
             moving: true, oneWay: false,
-            baseX: x + 250, range: travel, speed: 70 + rng() * 50, dir: 1, phase: rng() * 6.28
+            baseX: x + 240, range: travel, speed: 60 + rng() * 36, dir: 1, phase: rng() * 6.28
           });
-          this._coinRow(x + 300, GROUND_Y - 210, 3, 46);
-          const after = x + 250 + travel + 190;
+          this._coinRow(x + 280, GROUND_Y - PLAT_FROM_GROUND - 52, 3, 46);
+          const after = x + 240 + travel + 200;
           this._ground(after, 280);
           return after + 280;
         }
@@ -185,7 +192,7 @@
           const hx = x + 250 + rng() * 130;
           this.hazards.push({ x: hx, y: GROUND_Y - 34, w: 74, h: 34 });
           this._coinArc(hx - 40, GROUND_Y - 96, 5, 38);
-          this._plat(hx - 60, GROUND_Y - 150, 190);
+          this._plat(hx - 70, GROUND_Y - PLAT_FROM_GROUND, 210);
           return x + 640;
         }
         case 'enemy': {
@@ -199,19 +206,18 @@
           return x + 660;
         }
         case 'tower': {
-          this._ground(x, 240);
-          this._plat(x + 300, GROUND_Y - 110, 120);
-          this._plat(x + 480, GROUND_Y - 210, 120);
-          this._plat(x + 300, GROUND_Y - 310, 120);
-          this._coin(x + 360, GROUND_Y - 360);
-          this._coin(x + 540, GROUND_Y - 260);
-          this._ground(x + 660, 300);
+          this._ground(x, 960);
+          this._plat(x + 280, GROUND_Y - STEP, 160);
+          this._plat(x + 460, GROUND_Y - STEP * 2, 160);
+          this._plat(x + 280, GROUND_Y - STEP * 3, 160);
+          this._coin(x + 340, GROUND_Y - STEP * 3 - 48);
+          this._coin(x + 520, GROUND_Y - STEP * 2 - 48);
           return x + 960;
         }
         default: { // flat
           this._ground(x, 620);
           this._coinRow(x + 180, GROUND_Y - 96, 5, 48);
-          if (rng() > 0.55) this._plat(x + 340, GROUND_Y - 160, 150);
+          if (rng() > 0.55) this._plat(x + 340, GROUND_Y - PLAT_FROM_GROUND, 170);
           return x + 620;
         }
       }

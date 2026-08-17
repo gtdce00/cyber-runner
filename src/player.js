@@ -69,11 +69,12 @@
     airAccel: 1900,
     friction: 3000,
     airFriction: 700,
-    jumpVelocity: -760,
-    doubleJumpVelocity: -660,
+    jumpVelocity: -850,
+    doubleJumpVelocity: -700,
     coyoteTime: 0.11,        // ยังกระโดดได้แม้เพิ่งตกขอบ
     jumpBuffer: 0.13,        // กดกระโดดก่อนแตะพื้นเล็กน้อยก็ยังนับ
-    variableJumpCut: 0.45    // ปล่อยปุ่มเร็ว = กระโดดเตี้ยลง
+    variableJumpCut: 0.16,   // ปล่อยปุ่มเร็ว = กระโดดเตี้ยลง (เบา เพื่อให้เด็กกดแปะแล้วยังถึงแท่น)
+    minJumpHold: 0.12        // ถือแรงกระโดดอย่างน้อยช่วงสั้น ๆ แม้ปล่อยปุ่มเร็ว
   };
 
   class Player {
@@ -98,6 +99,7 @@
       this.invuln = 0;
       this.reactionTimer = 0;
       this.frozen = false;
+      this._jumpHoldGrace = 0;
       this.dustTimer = 0;
       this.spawnX = x; this.spawnY = y;
     }
@@ -169,12 +171,15 @@
         this.buffer = 0;
         this.onGround = false;
         this.squash = 0.84;
+        this._jumpHoldGrace = PHY.minJumpHold;
         CR.Sound.play('jump', { rate: isFirst ? 1 : 1.2 });
         if (particles) particles.jumpDust(this.centerX, this.y + this.h, isFirst ? 9 : 13);
       }
 
+      if (this._jumpHoldGrace > 0) this._jumpHoldGrace -= dt;
+      const holdingJump = Input.jumpHeld || this._jumpHoldGrace > 0;
       // ปล่อยปุ่มกลางอากาศ -> ตัดแรงกระโดด
-      if (this.vy < 0 && !Input.jumpHeld) this.vy += Math.abs(PHY.jumpVelocity) * PHY.variableJumpCut * dt * 6;
+      if (this.vy < 0 && !holdingJump) this.vy += Math.abs(PHY.jumpVelocity) * PHY.variableJumpCut * dt * 6;
 
       /* ---------- แรงโน้มถ่วง ---------- */
       const g = this.vy > 0 ? PHY.fallGravity : PHY.gravity;
